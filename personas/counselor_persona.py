@@ -200,14 +200,25 @@ class CounselorPersona(BasePersona):
                 "within your control right now. What's one thing you can control in this moment?"
             ],
             'stressed': [
-                "Stress is your body's response to demands. Let's identify your main stressors "
-                "and develop a plan to manage them. What feels most overwhelming right now?",
+                "It's understandable to feel stressed in a demanding work environment. Based on privacy-protected simulations, quick daily practices like mindfulness can help. What parts of your day feel most overwhelming?",
                 
-                "Chronic stress can impact your health. It's important to develop healthy coping "
-                "mechanisms. Have you tried any stress-management techniques before?",
+                "Stress is your body's response to demands. Based on privacy-protected data patterns, breaking tasks into smaller steps often reduces overwhelm. Let's identify your main stressors and develop a plan. What feels most overwhelming right now?",
                 
-                "Stress management is a skill we can develop together. Let's start by breaking down "
-                "the problem into smaller, manageable pieces."
+                "I understand work stress can be intense. Privacy-protected case studies suggest that structured breaks and boundary-setting can significantly reduce stress levels. What strategies have you tried so far?",
+                
+                "Chronic stress can impact your health. It's important to develop healthy coping mechanisms. Have you tried any stress-management techniques before?",
+                
+                "Stress management is a skill we can develop together. Let's start by breaking down the problem into smaller, manageable pieces."
+            ],
+            'work_tired': [
+                "It's understandable to feel tired from work demands. Based on privacy-protected simulations, quick daily practices like mindfulness can help. What parts of your day feel most overwhelming?",
+                
+                "Work-related exhaustion is common. Privacy-protected patterns suggest that energy management and strategic breaks can help. What does your typical workday look like?"
+            ],
+            'burnout': [
+                "Burnout is a serious concern. Based on privacy-protected simulations, establishing boundaries and incorporating small relaxation practices can gradually help. What's making it difficult for you to relax?",
+                
+                "I hear that you're experiencing burnout. Privacy-protected research shows that structured self-care and professional support are key. Have you been able to identify what activities used to help you unwind?"
             ],
             'worthless': [
                 "Feelings of worthlessness are often a symptom of depression. " +

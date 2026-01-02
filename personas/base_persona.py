@@ -133,15 +133,32 @@ class FriendPersona(BasePersona):
                     "Thank you for trusting me. Let's talk through this together. What's bothering you?"
                 ])
         
-        # Check for stress-related keywords
-        if any(word in user_lower for word in ['stress', 'overwhelm', 'pressure', 'too much', 'burden', 'exhausted']):
-            return random.choice([
-                "That sounds really overwhelming. I'm here for you. Can you tell me more about what's stressing you out? 💙",
-                "Stress can be so draining. What specifically has been weighing on you? Let's talk through it.",
-                "I hear you - that sounds like a lot to carry. What's been the biggest stressor for you?",
-                "Feeling stressed is tough. I'm here to listen. What's causing the most pressure right now?",
-                "That must feel exhausting. Want to tell me more about what's making you feel this way?"
-            ])
+        # Check for stress-related keywords (including work-related stress and tiredness)
+        if any(word in user_lower for word in ['stress', 'overwhelm', 'pressure', 'too much', 'burden', 'exhausted', 'tired', 'tiredness', 'draining', 'work is making', 'burned out', 'burnout']):
+            # Work-related tiredness
+            if any(word in user_lower for word in ['work', 'job', 'tired', 'tiredness', 'exhausted', 'draining']):
+                return random.choice([
+                    "Oh man, constant tiredness from work is draining, right? I know the feeling. Maybe grab a coffee break or stretch it out? What's your go-to for recharging?",
+                    "Work exhaustion is the worst. I totally get it. Have you had a chance to take a breather lately? What helps you recharge?",
+                    "Ugh, work can really drain your energy. I hear you. Do you have any little rituals that help you unwind?",
+                    "Being tired from work all the time is rough. What do you usually do to recharge your batteries?"
+                ])
+            # Burnout related
+            elif any(word in user_lower for word in ['burned out', 'burnout', "don't know how to relax", 'relax']):
+                return random.choice([
+                    "Burnout is so real and it's tough. Have you tried just doing something small that makes you smile? Even 10 minutes can help. What used to relax you?",
+                    "Man, burnout hits hard. Sometimes we forget how to relax when we're in it. What's something simple you enjoyed before things got this hectic?",
+                    "I hear you on the burnout. It's like you forget what relaxation even feels like, right? Want to brainstorm some easy ways to decompress?"
+                ])
+            # General stress
+            else:
+                return random.choice([
+                    "That sounds really overwhelming. I'm here for you. Can you tell me more about what's stressing you out? 💙",
+                    "Stress can be so draining. What specifically has been weighing on you? Let's talk through it.",
+                    "I hear you - that sounds like a lot to carry. What's been the biggest stressor for you?",
+                    "Feeling stressed is tough. I'm here to listen. What's causing the most pressure right now?",
+                    "That must feel exhausting. Want to tell me more about what's making you feel this way?"
+                ])
         
         # Check for uncertainty/confusion
         if any(word in user_lower for word in ["don't know", 'not sure', 'confused', 'uncertain', 'lost']):
@@ -169,9 +186,11 @@ class FriendPersona(BasePersona):
                 "I can hear that you're going through a hard time. You don't have to face this alone."
             ],
             'stressed': [
+                "Hey, super stressed from work? I feel you. What parts of your day feel most overwhelming?",
                 "Wow, that sounds overwhelming. Take a deep breath with me. Want to talk through it?",
                 "Stress is so tough. What's been weighing on you the most?",
-                "I hear you. Sometimes everything feels like too much. Let's break it down together."
+                "I hear you. Sometimes everything feels like too much. Let's break it down together.",
+                "Oh man, stress is no joke. What's your go-to for when things get intense? Coffee? Walk? Let's figure this out together."
             ],
             'anxious': [
                 "Anxiety can feel so scary. I'm here with you. What's making you feel anxious?",
