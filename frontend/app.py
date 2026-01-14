@@ -126,6 +126,18 @@ st.markdown("""
         font-weight: 500;
         margin: 0.3rem 0;
     }
+    .input-container {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        margin-top: 1rem;
+    }
+    .input-container .stTextArea {
+        flex: 1;
+    }
+    div[data-testid="column"] {
+        padding: 0 !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -138,6 +150,8 @@ def initialize_session():
         st.session_state.messages = []
     if 'current_persona' not in st.session_state:
         st.session_state.current_persona = 'friend'
+    if 'input_counter' not in st.session_state:
+        st.session_state.input_counter = 0
 
 
 def create_session():
@@ -284,20 +298,24 @@ def display_chat():
     
     # Input area
     st.markdown("---")
-    user_input = st.text_area(
-        "Type your message here...",
-        key="user_input",
-        height=100,
-        placeholder=f"Chat with {persona_names[st.session_state.current_persona]}..."
-    )
     
-    col1, col2, col3 = st.columns([1, 1, 4])
+    # Create columns for inline layout
+    col_input, col_send = st.columns([5, 1])
     
-    with col1:
-        send_button = st.button("Send 📤", use_container_width=True)
+    with col_input:
+        user_input = st.text_area(
+            "Type your message here...",
+            key=f"user_input_{st.session_state.input_counter}",
+            height=100,
+            placeholder=f"Chat with {persona_names[st.session_state.current_persona]}...",
+            label_visibility="collapsed"
+        )
     
-    with col2:
-        clear_button = st.button("Clear Chat 🗑️", use_container_width=True)
+    with col_send:
+        st.markdown("<br>", unsafe_allow_html=True)  # Spacing
+        send_button = st.button("📤", use_container_width=True, help="Send message")
+        st.markdown("<br>", unsafe_allow_html=True)  # Spacing
+        clear_button = st.button("🗑️", use_container_width=True, help="Clear chat")
     
     # Handle send button
     if send_button and user_input.strip():
@@ -305,10 +323,13 @@ def display_chat():
             st.session_state.session_id = create_session()
         
         if st.session_state.session_id:
+            # Store the message before clearing
+            message_to_send = user_input.strip()
+            
             # Add user message
             st.session_state.messages.append({
                 'role': 'user',
-                'content': user_input,
+                'content': message_to_send,
                 'timestamp': datetime.now().isoformat()
             })
             
@@ -316,7 +337,7 @@ def display_chat():
             with st.spinner("Thinking..."):
                 response = send_message(
                     st.session_state.session_id,
-                    user_input,
+                    message_to_send,
                     st.session_state.current_persona
                 )
             
@@ -331,6 +352,9 @@ def display_chat():
                     'crisis_detected': response.get('crisis_detected', False),
                     'timestamp': datetime.now().isoformat()
                 })
+            
+            # Increment counter to clear the input by creating a new widget
+            st.session_state.input_counter += 1
             
             st.rerun()
     

@@ -170,6 +170,11 @@ class CounselorPersona(BasePersona):
         
         # Intent-based therapeutic responses
         counselor_responses = {
+            'greeting': [
+                "Hello. I'm here to support you. What brings you here today?",
+                "Good to see you. How have you been feeling?",
+                "Welcome. What would you like to discuss today?"
+            ],
             'sad': [
                 "I hear that you're feeling sad. Sadness is a normal emotion, but when it persists, "
                 "it's important to address it. Can you tell me more about what's contributing to these feelings?",
@@ -180,7 +185,7 @@ class CounselorPersona(BasePersona):
                 "I appreciate you opening up about your sadness. It takes courage to acknowledge "
                 "difficult emotions. What do you think might help you feel better?"
             ],
-            'depressed': [
+            'depression': [
                 "Depression can feel overwhelming, but it is treatable. You've taken an important "
                 "first step by reaching out. Have you been able to maintain your daily routines?",
                 
@@ -190,7 +195,7 @@ class CounselorPersona(BasePersona):
                 
                 "Depression affects many aspects of life. " + self.get_cbt_technique('behavioral_activation')
             ],
-            'anxious': [
+            'anxiety': [
                 "Anxiety can be very distressing. Let's work on some grounding techniques. " +
                 self.get_cbt_technique('mindfulness'),
                 
@@ -199,26 +204,41 @@ class CounselorPersona(BasePersona):
                 "Anxiety often involves worrying about future events. Let's focus on what's "
                 "within your control right now. What's one thing you can control in this moment?"
             ],
-            'stressed': [
-                "It's understandable to feel stressed in a demanding work environment. Based on privacy-protected simulations, quick daily practices like mindfulness can help. What parts of your day feel most overwhelming?",
+            'stress': [
+                "It's understandable to feel stressed in a demanding environment. Based on privacy-protected simulations, quick daily practices like mindfulness can help. What parts of your day feel most overwhelming?",
                 
                 "Stress is your body's response to demands. Based on privacy-protected data patterns, breaking tasks into smaller steps often reduces overwhelm. Let's identify your main stressors and develop a plan. What feels most overwhelming right now?",
                 
-                "I understand work stress can be intense. Privacy-protected case studies suggest that structured breaks and boundary-setting can significantly reduce stress levels. What strategies have you tried so far?",
+                "I understand stress can be intense. Privacy-protected case studies suggest that structured breaks and boundary-setting can significantly reduce stress levels. What strategies have you tried so far?",
                 
                 "Chronic stress can impact your health. It's important to develop healthy coping mechanisms. Have you tried any stress-management techniques before?",
                 
-                "Stress management is a skill we can develop together. Let's start by breaking down the problem into smaller, manageable pieces."
+                "Stress management is a skill we can develop together. Let's start by identifying specific stressors and creating an action plan."
             ],
-            'work_tired': [
-                "It's understandable to feel tired from work demands. Based on privacy-protected simulations, quick daily practices like mindfulness can help. What parts of your day feel most overwhelming?",
+            'work_stress': [
+                "It's understandable to feel stressed in a demanding work environment. Based on privacy-protected simulations, quick daily practices like mindfulness can help. What parts of your day feel most overwhelming?",
                 
-                "Work-related exhaustion is common. Privacy-protected patterns suggest that energy management and strategic breaks can help. What does your typical workday look like?"
+                "Work-related stress is very common, especially in demanding professions. Privacy-protected research suggests that setting boundaries and taking micro-breaks can help. What does your typical workday look like?",
+                
+                "I hear the work pressure is really affecting you. Based on privacy-protected case studies, time management and stress-reduction techniques can make a significant difference. Would you like to explore some specific strategies?",
+                
+                "Work stress can accumulate over time. Let's break this down - what specific aspects of work are most stressful? We can develop targeted coping strategies for each.",
+                
+                "Many professionals experience this. Privacy-protected data suggests that work-life balance and self-care practices are crucial. What does relaxation look like for you?"
             ],
             'burnout': [
                 "Burnout is a serious concern. Based on privacy-protected simulations, establishing boundaries and incorporating small relaxation practices can gradually help. What's making it difficult for you to relax?",
                 
-                "I hear that you're experiencing burnout. Privacy-protected research shows that structured self-care and professional support are key. Have you been able to identify what activities used to help you unwind?"
+                "I hear that you're experiencing burnout. Privacy-protected research shows that structured self-care and professional support are key. Have you been able to identify what activities used to help you unwind?",
+                
+                "Burnout requires intentional recovery. Let's explore what sustainable changes you can make to your routine. What does a typical day look like for you right now?"
+            ],
+            'coping_strategies': [
+                "There are many evidence-based coping strategies we can explore. Some effective ones include mindfulness, progressive muscle relaxation, and cognitive restructuring. Which of these interests you?",
+                
+                "Let's develop a personalized toolkit of coping strategies. What has worked for you in the past? What would you like to try?",
+                
+                "For relaxation, I often recommend: deep breathing exercises, progressive muscle relaxation, mindfulness meditation, gentle exercise like walking, or creative activities. What appeals to you?"
             ],
             'worthless': [
                 "Feelings of worthlessness are often a symptom of depression. " +
@@ -230,19 +250,24 @@ class CounselorPersona(BasePersona):
                 "Worthlessness is a feeling, not a fact. Your worth is inherent, not based on "
                 "achievements or others' opinions. Let's explore where these thoughts come from."
             ],
-            'sleep': [
+            'sleep_problems': [
                 "Sleep difficulties are common with stress and mental health challenges. "
-                "Let's discuss sleep hygiene practices that might help.",
+                "Let's discuss sleep hygiene practices that might help, such as maintaining a consistent schedule and creating a relaxing bedtime routine.",
                 
                 "Poor sleep can worsen mental health symptoms, and mental health issues can disrupt sleep. "
-                "It's a cycle we can work to break. Tell me about your bedtime routine."
+                "It's a cycle we can work to break. Tell me about your current bedtime routine and sleep environment."
             ],
             'help': [
                 "I'm here to help you explore your thoughts and feelings, and develop coping strategies. "
                 "What specific area would you like to focus on today?",
                 
                 "I can provide support and evidence-based coping techniques. However, for diagnosis "
-                "and medication, please consult a licensed mental health professional."
+                "and medication, please consult a licensed mental health professional. What brings you here?"
+            ],
+            'therapy': [
+                "Seeking professional therapy is an excellent step. I can offer support and coping strategies, but a licensed therapist can provide comprehensive treatment. What specific concerns would you like to address?",
+                
+                "Professional therapy can be very beneficial. In the meantime, let's work on some coping strategies you can use. What's your main concern right now?"
             ]
         }
         
@@ -250,19 +275,44 @@ class CounselorPersona(BasePersona):
         if intent in counselor_responses:
             response = random.choice(counselor_responses[intent])
         else:
-            # Generic therapeutic responses
-            generic = [
-                "I'm listening. Can you tell me more about that?",
-                "How long have you been experiencing this?",
-                "What have you tried so far to address this?",
-                "How is this affecting your daily life?",
-                "What would it look like if this improved? What would be different?"
-            ]
-            response = random.choice(generic)
+            # Improved generic therapeutic responses based on common patterns
+            if any(word in user_input.lower() for word in ['work', 'job', 'workplace', 'office', 'career']):
+                response = random.choice([
+                    "Work-related challenges can significantly impact our well-being. What specific aspects of work are most difficult for you right now?",
+                    "I understand workplace stress can be overwhelming. Let's explore what's happening and develop some coping strategies. What's your biggest concern?",
+                    "Many people struggle with work-related stress. Based on privacy-protected patterns, targeted strategies can help. Tell me more about what's going on."
+                ])
+            elif any(word in user_input.lower() for word in ['relax', 'calm', 'unwind', 'de-stress']):
+                response = random.choice([
+                    "Finding ways to relax is important. Some evidence-based techniques include: deep breathing, progressive muscle relaxation, mindfulness meditation, and engaging in enjoyable activities. What sounds appealing to you?",
+                    "Relaxation is a skill we can develop. I can guide you through several techniques - breathing exercises, body scanning, or guided imagery. Which would you like to try?",
+                    "There are many relaxation strategies we can explore. Based on privacy-protected research, regular practice of even 5-10 minutes daily can make a difference. What have you tried before?"
+                ])
+            elif any(word in user_input.lower() for word in ['stress', 'stressed', 'overwhelmed', 'pressure']):
+                response = random.choice([
+                    "Stress can feel very overwhelming. Let's break this down into manageable pieces. What's causing the most stress right now?",
+                    "I hear that you're feeling stressed. Based on privacy-protected case studies, identifying specific stressors and addressing them one at a time can help. Where shall we start?",
+                    "Stress affects us all differently. What symptoms are you noticing? Understanding your stress response helps us develop targeted strategies."
+                ])
+            else:
+                response = random.choice([
+                    "I'm listening. Can you tell me more about what you're experiencing?",
+                    "Thank you for sharing. How long have you been dealing with this?",
+                    "What have you tried so far to address this situation?",
+                    "How is this affecting your daily life and well-being?",
+                    "I'd like to understand this better. Can you describe what a typical day looks like for you?"
+                ])
         
         # Add video recommendations for specific intents
-        if intent in ['anxious', 'depressed', 'stressed', 'sleep']:
-            videos = self.suggest_videos(intent)
+        if intent in ['anxiety', 'depression', 'stress', 'work_stress', 'sleep_problems']:
+            topic_map = {
+                'anxiety': 'anxiety',
+                'depression': 'depression',
+                'stress': 'stress',
+                'work_stress': 'stress',
+                'sleep_problems': 'sleep'
+            }
+            videos = self.suggest_videos(topic_map.get(intent, 'general'))
             if videos:
                 response += self.format_video_recommendations(videos[:2])  # Show top 2
         

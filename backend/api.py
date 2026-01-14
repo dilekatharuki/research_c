@@ -49,11 +49,17 @@ dp_mechanism = DifferentialPrivacy(epsilon=1.0)
 anonymizer = DataAnonymizer()
 preprocessor = TextPreprocessor()
 
-# Try to load intent classifier
+# Try to load intent classifier (using fine-tuned model)
 try:
     from models.intent_classifier import IntentClassificationEngine
     intent_classifier = IntentClassificationEngine()
-    intent_classifier.load_model("models/trained_intent_classifier")
+    # Try improved fine-tuned model first, fallback to original
+    try:
+        intent_classifier.load_model("models/finetuned_intent_classifier_v2")
+        print("✓ Loaded improved fine-tuned model (v2)")
+    except:
+        intent_classifier.load_model("models/trained_intent_classifier")
+        print("✓ Loaded original trained model")
     CLASSIFIER_LOADED = True
 except Exception as e:
     print(f"Warning: Could not load intent classifier: {e}")
