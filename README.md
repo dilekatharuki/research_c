@@ -1,8 +1,8 @@
-# Empathetic Conversational Support System (Component 3)
+# Empathetic Conversational Support System
 
 ## 💙 Manō - Mental Health Support for STEM Professionals
 
-A complete AI-powered mental health chatbot system with three distinct personas, built using BERT for intent classification and privacy-preserving mechanisms.
+A complete AI-powered mental health chatbot system with three distinct personas, behavioral assessment questionnaire, and privacy-preserving mechanisms. Built using BERT for intent classification.
 
 ---
 
@@ -11,18 +11,21 @@ A complete AI-powered mental health chatbot system with three distinct personas,
 This system provides empathetic conversational support through three AI personas:
 - **👥 Friend** - Casual, warm, and emotionally supportive
 - **🧑‍⚕️ Counselor** - Professional therapeutic guidance with CBT techniques and video recommendations
-- **👨‍⚕️ Doctor** - Clinical mental health information and medical guidance
+- **👨‍⚕️ Medical Officer** - Clinical mental health information and medical guidance
 
 **Key Features:**
-- ✅ BERT-based intent classification (84+ categories, 290+ patterns)
+- ✅ BERT-based intent classification (23 categories, 290+ patterns)
 - ✅ Three unique AI personas with distinct communication styles
+- ✅ **Behavioral Assessment Questionnaire** with automated scoring
 - ✅ Context-aware response generation
 - ✅ Privacy protection (Differential Privacy + PII anonymization)
+- ✅ **Auto-save chat history** (JSON format)
 - ✅ Crisis detection and intervention
 - ✅ Video recommendations for mental health topics
 - ✅ Real-time web interface
-- ✅ RESTful API with 10+ endpoints
+- ✅ RESTful API with 15+ endpoints
 - ✅ Voice support capabilities (TTS/STT)
+- ✅ **Model prediction endpoints** for integration
 
 ---
 
@@ -43,8 +46,9 @@ This will:
 ### 2. Use the Application
 
 1. Open http://localhost:8501 in your browser
-2. Select a persona (Friend, Counselor, or Doctor)
-3. Start chatting!
+2. **(Optional) Complete Behavioral Assessment** - Fill out the 5-question questionnaire for personalized insights
+3. Select a persona (Friend, Counselor, or Medical Officer)
+4. Start chatting!
 
 **Try these examples:**
 - "I'm feeling stressed about work"
@@ -52,25 +56,30 @@ This will:
 - "What are the symptoms of anxiety?"
 - "I need someone to talk to"
 
+**Access API Documentation:**
+- Swagger UI: http://localhost:8000/docs
+- Alternative: http://localhost:8000/redoc
+
 ---
 
 ## 📁 Project Structure
 
 ```
-empathetic_support_system/
+research_c/
 ├── backend/
-│   ├── api.py                    # FastAPI REST API (10+ endpoints)
+│   ├── api.py                    # FastAPI REST API (15+ endpoints)
 │   └── integration.py            # Component integration interfaces
 ├── frontend/
 │   └── app.py                    # Streamlit web interface
 ├── models/
 │   ├── intent_classifier.py     # BERT-based intent classification
 │   ├── response_generator.py    # Hybrid response generation
-│   └── trained_intent_classifier/  # Trained model files
+│   ├── trained_intent_classifier/     # Trained model files (82.93% accuracy)
+│   └── finetuned_intent_classifier_v2/ # Fine-tuned model
 ├── personas/
 │   ├── base_persona.py          # Friend persona + base class
 │   ├── counselor_persona.py     # Counselor with CBT + videos
-│   └── doctor_persona.py        # Clinical information
+│   └── doctor_persona.py        # Medical Officer (clinical info)
 ├── privacy/
 │   └── privacy_manager.py       # Privacy mechanisms
 ├── utils/
@@ -78,17 +87,27 @@ empathetic_support_system/
 │   ├── text_preprocessor.py    # NLP preprocessing
 │   └── voice_support.py         # TTS/STT capabilities
 ├── data/
-│   ├── Mental_Health_FAQ.csv    # FAQ dataset
-│   ├── intents.json             # Intent patterns
-│   ├── train.csv                # Training conversations
-│   └── additional_intents.json  # Extended patterns
+│   ├── intents.json             # Intent patterns (20 categories)
+│   └── synthetic_mental_health_data_v1.csv  # Training data
+├── scripts/                     # Python scripts for training & testing
+│   ├── train_model.py           # Train BERT model
+│   ├── finetune_model_enhanced.py  # Fine-tune with enhanced data
+│   ├── finetune_model_improved.py  # Improved fine-tuning
+│   ├── finetune_model.py        # Basic fine-tuning
+│   ├── evaluate_model.py        # Model evaluation
+│   ├── generate_model_output.py # Generate output files
+│   ├── test_system.py           # System verification
+│   ├── test_questionnaire.py    # Test behavioral assessment
+│   ├── test_new_endpoints.py    # Test new API endpoints
+│   ├── test_finetuned_model.py  # Test fine-tuned models
+│   ├── test_422_fix.py          # Test 422 error fixes
+│   └── quick_start.py           # Setup wizard
+├── chat_history/                # Auto-saved chat sessions (JSON)
+├── questionnaire_results/       # Behavioral assessment results (JSON + CSV)
 ├── venv/                        # Python virtual environment
-├── train_model.py               # Model training script
-├── test_system.py               # System verification
-├── quick_start.py               # Setup wizard
-├── start_system.ps1             # Quick launch script
 ├── config.py                    # Configuration management
 ├── requirements.txt             # Dependencies
+├── start_system.ps1             # Quick launch script
 └── README.md                    # This file
 ```
 
@@ -136,6 +155,79 @@ empathetic_support_system/
 - Weight decay for regularization
 - Best model tracking
 - Extended context window (256 tokens)
+
+---
+
+## 📋 Behavioral Assessment Questionnaire
+
+**NEW FEATURE:** Standardized questionnaire to assess user well-being and stress levels.
+
+### Questions (5 Total)
+
+1. **Work Environment** (Multiple choice)
+   - High-pressure deadlines (1 pt)
+   - Collaborative team (3 pts)
+   - Independent focus (2 pts)
+   - Balanced routine (4 pts)
+
+2. **Stress Management** (Slider: 1-10)
+   - Direct score: 1 = Frequently overwhelming, 10 = Easy to handle
+
+3. **Self-Care Frequency** (Dropdown)
+   - Daily (4 pts) | Few times/week (3 pts) | Rarely (2 pts) | Never (1 pt)
+
+4. **Support Interest** (Multiple choice)
+   - Quick tips (2 pts) | Long-term strategies (3 pts) | Professional advice (3 pts) | None (1 pt)
+
+5. **Energy Level** (Slider: 1-10)
+   - Direct score: 1 = Completely drained, 10 = Energized
+
+### Scoring Categories
+
+- **25-31 points:** Excellent Well-being ✅
+- **20-24 points:** Good Well-being 👍
+- **15-19 points:** Moderate Concern ⚠️
+- **0-14 points:** Needs Attention 🚨
+
+### Output Files
+
+Results automatically saved in **two formats**:
+
+**JSON Format** (`questionnaire_results/{session_id}_{timestamp}.json`):
+```json
+{
+  "session_id": "...",
+  "timestamp": "2026-02-13T12:51:27",
+  "answers": {...},
+  "individual_scores": {...},
+  "total_score": 23.0,
+  "category": "Good Well-being",
+  "interpretation": "You're managing well overall..."
+}
+```
+
+**CSV Format** (`questionnaire_results/{session_id}_{timestamp}.csv`):
+- Excel-compatible for analysis
+- Contains all metrics and scores
+- Timestamp for tracking
+
+### API Endpoint
+
+```bash
+POST /questionnaire/submit
+Content-Type: application/json
+
+{
+  "session_id": "uuid",
+  "answers": {
+    "work_environment": "Balanced routine",
+    "stress_management": 7,
+    "selfcare_frequency": "A few times a week",
+    "support_interest": "Long-term strategies",
+    "energy_level": 6
+  }
+}
+```
 
 ---
 
@@ -187,7 +279,7 @@ empathetic_support_system/
 
 ---
 
-### 👨‍⚕️ Doctor Persona
+### 👨‍⚕️ Medical Officer Persona
 **Style:** Clinical, informational, evidence-based
 **Best For:**
 - Mental health conditions
@@ -241,6 +333,7 @@ empathetic_support_system/
 ### Session Management
 - `POST /session/create` - Create new chat session
 - `GET /session/{session_id}` - Get session details
+- `GET /session/{session_id}/history` - Get conversation history
 - `DELETE /session/{session_id}` - Delete session
 
 ### Chat
@@ -249,12 +342,44 @@ empathetic_support_system/
   {
     "session_id": "string",
     "message": "string",
-    "persona": "friend|counselor|doctor"
+    "persona": "friend|counselor|medical_officer"
   }
   ```
 
+### Chat History (Auto-Save)
+- `GET /history/{session_id}` - Retrieve saved chat history
+- `POST /history/{session_id}/save` - Manually save history
+- `GET /history` - List all saved histories
+
+**Note:** Chat history automatically saves after each message to `chat_history/{session_id}.json`
+
+### Behavioral Assessment
+- `POST /questionnaire/submit` - Submit questionnaire and get score
+  - Returns: total_score, category, interpretation, individual_scores
+  - Auto-saves to: `questionnaire_results/{session_id}_{timestamp}.json` and `.csv`
+
+### Model Prediction
+- `POST /model/predict` - Predict intent for single text
+  ```json
+  {
+    "text": "I'm feeling stressed",
+    "return_confidence": true
+  }
+  ```
+  
+- `POST /model/predict/batch` - Batch intent prediction
+  ```json
+  {
+    "texts": ["text1", "text2", "text3"],
+    "return_confidence": true
+  }
+  ```
+  
+- `GET /model/info` - Get model metadata
+  - Returns: model_name, device, num_classes, intents list
+
 ### Information
-- `GET /personas` - List available personas
+- `GET /personas` - List available personas (Friend, Counselor, Medical Officer)
 - `GET /statistics` - Get system statistics (with DP)
 - `GET /health` - Health check
 
@@ -297,29 +422,47 @@ ENABLE_INTEGRATION = False
 
 ```powershell
 # Test system components
-python test_system.py
+python scripts/test_system.py
 
-# Run unit tests
-pytest
+# Test behavioral questionnaire
+python scripts/test_questionnaire.py
 
-# Test API endpoints
+# Test new API endpoints
+python scripts/test_new_endpoints.py
+
+# Test API endpoints interactively
 # Visit http://localhost:8000/docs
 ```
 
 ---
 
-## 🔄 Retraining the Model
+## 🔄 Training & Fine-tuning
 
-If you want to retrain with different parameters:
+### Train the Model
 
 ```powershell
-# Edit train_model.py to adjust:
-# - epochs (default: 15)
-# - batch_size (default: 8)
-# - learning_rate (default: 3e-5)
+# Train BERT model from scratch
+python scripts/train_model.py
+```
 
-# Then train
-python train_model.py
+### Fine-tune the Model
+
+```powershell
+# Enhanced fine-tuning with augmented data
+python scripts/finetune_model_enhanced.py
+
+# Improved fine-tuning
+python scripts/finetune_model_improved.py
+
+# Basic fine-tuning
+python scripts/finetune_model.py
+```
+
+### Evaluate Model
+
+```powershell
+# Evaluate model accuracy
+python scripts/evaluate_model.py
 ```
 
 **Training takes:** 30-45 minutes on CPU, 5-10 minutes on GPU
@@ -330,7 +473,8 @@ python train_model.py
 
 ### Model Not Found
 ```powershell
-python train_model.py
+# Train the model
+python scripts/train_model.py
 ```
 
 ### Port Already in Use
@@ -350,13 +494,19 @@ pip install -r requirements.txt
 dir models\trained_intent_classifier
 
 # If not found, train the model
-python train_model.py
+python scripts/train_model.py
 ```
 
 ### Frontend Shows Connection Error
 - Ensure backend is running on port 8000
 - Check: http://localhost:8000/health
 - Restart backend if needed
+
+### Questionnaire Not Working
+```powershell
+# Test the questionnaire endpoint
+python scripts/test_questionnaire.py
+```
 
 ---
 
@@ -377,49 +527,19 @@ python train_model.py
 
 ## 📈 System Statistics
 
-- **Total Files:** 28+
-- **Lines of Code:** 5,000+
-- **Intent Categories:** 84
+- **Total Files:** 35+
+- **Lines of Code:** 6,500+
+- **Intent Categories:** 23
 - **Training Patterns:** 290+
-- **Response Templates:** 100+
+- **Response Templates:** 150+
 - **Video Resources:** 8+
-- **API Endpoints:** 10+
-- **Personas:** 3
+- **API Endpoints:** 15+
+- **Personas:** 3 (Friend, Counselor, Medical Officer)
 - **Privacy Mechanisms:** 4
-
----
-
-## 🎓 Usage Tips
-
-**For Best Results:**
-
-1. **Be specific** - The more details you provide, the better the response
-2. **Try different personas** - Each has unique strengths
-3. **Use the Counselor for resources** - Get video recommendations
-4. **Friend for emotional support** - When you need someone to listen
-5. **Doctor for information** - Learn about mental health conditions
-
-**Example Conversations:**
-
-**With Friend:**
-```
-You: "I'm feeling really overwhelmed with work"
-Friend: "That sounds really tough. I'm here for you. What's been weighing on you the most? 💙"
-```
-
-**With Counselor:**
-```
-You: "I can't stop worrying about everything"
-Counselor: "Constant worrying can be exhausting. Let me share some CBT techniques..."
-[Provides cognitive restructuring strategies + anxiety management videos]
-```
-
-**With Doctor:**
-```
-You: "What is burnout?"
-Doctor: "Burnout is a state of emotional, physical, and mental exhaustion..."
-[Provides clinical definition, symptoms, and treatment options]
-```
+- **Questionnaire Questions:** 5
+- **Model Accuracy:** 82.93%
+- **Model Size:** 438MB
+- **Output Formats:** JSON + CSV
 
 ---
 
@@ -427,16 +547,16 @@ Doctor: "Burnout is a state of emotional, physical, and mental exhaustion..."
 
 For issues or questions:
 1. Check this README
-2. See PROJECT_STEPS.md for setup details
-3. Run `python test_system.py` to diagnose issues
-4. Check logs in `logs/` directory
+2. Run `python scripts/test_system.py` to diagnose issues
+3. Run `python scripts/test_questionnaire.py` to test behavioral assessment
+4. Visit API docs: http://localhost:8000/docs
 
 ---
 
 ## 📄 License
 
 Built for educational and research purposes.
-SLIIT Research Project - 2025
+SLIIT Research Project - 2026
 
 ---
 
@@ -452,5 +572,14 @@ SLIIT Research Project - 2025
 
 **Built with ❤️ for mental health support in STEM communities**
 
-**Version:** 1.0
-**Last Updated:** December 5, 2025
+**Version:** 1.2.0
+**Last Updated:** February 13, 2026
+
+**Recent Updates (v1.2.0):**
+- ✅ Added Behavioral Assessment Questionnaire (5 questions, automated scoring)
+- ✅ Auto-save chat history to JSON files
+- ✅ Model prediction API endpoints (single & batch)
+- ✅ Renamed Doctor persona to Medical Officer
+- ✅ Enhanced privacy features
+- ✅ Improved model accuracy (82.93%)
+- ✅ CSV + JSON output formats for analysis
